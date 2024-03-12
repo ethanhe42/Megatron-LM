@@ -16,7 +16,6 @@ from types import SimpleNamespace
 
 import torch.nn.functional as F
 from megatron.global_vars import set_retro_args, get_retro_args
-from tools.retro.utils import get_args_path as get_retro_args_path
 
 from megatron.core.models.retro import RetroConfig
 from megatron.core.transformer import TransformerConfig
@@ -343,6 +342,7 @@ def validate_yaml(args, defaults={}):
     #TODO: Retro args loading not tested
     # Load retro args (used by both Retro & GPT).
     if getattr(args, 'retro_workdir', None) is not None:
+        from tools.retro.utils import get_args_path as get_retro_args_path
         retro_args_path = get_retro_args_path(args.retro_workdir)
         assert os.path.exists(retro_args_path), "retro workdir missing args.json"
         with open(retro_args_path) as f:
@@ -425,7 +425,7 @@ def _check_arg_is_not_none(args, arg):
 
 def core_transformer_config_from_yaml(args, transfomer_key = "language_model"):    
     # Combine transfomer config with model parallel args
-    args = SimpleNamespace(**vars(getattr(args, transfomer_key)), **vars(args.model_parallel))
+    args = SimpleNamespace(**vars(args))
     # Translate args to core transformer configuration
     kw_args = core_config_from_args(args, TransformerConfig)    
     

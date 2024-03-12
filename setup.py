@@ -113,7 +113,7 @@ setuptools.setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
     ],
-    packages=setuptools.find_packages(include=['megatron.core', 'megatron.core.*'],),
+    packages=setuptools.find_packages(include=['megatron', 'megatron.*'],),
     ext_modules=[
         Extension(
             "megatron.core.datasets.helpers",
