@@ -18,6 +18,13 @@ def build_pretraining_data_loader(dataset, consumed_samples):
         return None
     args = get_args()
 
+    if not hasattr(dataset, '__len__'):
+        return torch.utils.data.DataLoader(dataset,
+            num_workers=args.num_workers,
+            pin_memory=True,
+            persistent_workers=True if args.num_workers > 0 else False,
+            )
+
     # Megatron sampler
     if args.dataloader_type == 'single':
         batch_sampler = MegatronPretrainingSampler(
